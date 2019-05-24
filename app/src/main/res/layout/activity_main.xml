@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ng.thanoslayout.custom.ThanosLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/thanos_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+    <ImageView
+            android:id="@+id/tony_image"
+            android:src="@drawable/tony"
+            android:scaleType="centerCrop"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"/>
+
+    <TextView
+            android:id="@+id/tony_header"
+            android:text="@string/tony_header"
+            android:textSize="16sp"
+            android:layout_toRightOf="@id/tony_image"
+            android:layout_marginLeft="16dp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/tony_description"
+            android:layout_marginLeft="14dp"
+            android:layout_toRightOf="@id/tony_image"
+            android:layout_below="@id/tony_header"
+            android:text="@string/tony_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <ImageView
+            android:id="@+id/capitan_image"
+            android:src="@drawable/capitan"
+            android:scaleType="centerCrop"
+            android:layout_below="@id/tony_description"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="16dp"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"/>
+
+    <TextView
+            android:id="@+id/capitan_header"
+            android:text="@string/capitan_header"
+            android:textSize="16sp"
+            android:layout_toRightOf="@id/capitan_image"
+            android:layout_marginLeft="16dp"
+            android:layout_alignTop="@id/capitan_image"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/capitan_description"
+            android:layout_marginLeft="14dp"
+            android:layout_toRightOf="@id/capitan_image"
+            android:layout_below="@id/capitan_header"
+            android:text="@string/capitan_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <Button
+            android:id="@+id/button_to_snap"
+            android:text="@string/snap"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bg_snap_button"
+            android:padding="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+</com.ng.thanoslayout.custom.ThanosLayout>

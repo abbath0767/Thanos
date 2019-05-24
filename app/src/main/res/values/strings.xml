@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ThanosLayout</string>
+    <string name="snap">Make Snap!</string>
+    <string name="tony_header">Tony Stark. Iron Man</string>
+    <string name="tony_description">Anthony Edward "Tony" Stark, simply known as Tony Stark, and also known as the famous super-hero named Iron Man, is a character that appears in the Iron Man trilogy films and in The Avengers movie. He was portrayed by actor Robert Downey, Jr., and is based on the character of the same name in the comics.</string>
+    <string name="capitan_header">Steven Rogers. Capitan America</string>
+    <string name="capitan_description">Captain America is a fictional superhero appearing in American comic books published by Marvel Comics. Created by cartoonists Joe Simon and Jack Kirby, the character first appeared in Captain America Comics #1 (cover dated March 1941) from Timely Comics, a predecessor of Marvel Comics.</string>
+</resources>
