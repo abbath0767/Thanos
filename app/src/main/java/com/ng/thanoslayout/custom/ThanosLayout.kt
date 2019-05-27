@@ -39,6 +39,7 @@ class ThanosLayout : RelativeLayout {
         val thanosViews = mutableListOf<ThanosView>().apply {
             viewsForDestroy.forEach { viewForDestroy ->
                 val thanosView = ThanosView(context).apply {
+                    infinityFist = this@ThanosLayout.infinityFist
                     id = View.generateViewId()
                 }
 //                val layoutParams = viewForDestroy.layoutParams

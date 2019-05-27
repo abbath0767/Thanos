@@ -15,8 +15,9 @@ class TimeStone(@ColorRes color: Int) {
     private val destroyDelay
         get() = (random.nextDouble() * 500L + 500L).toLong()
 
-    fun destroyWithDelay(thanosViews: List<ThanosView>, viewsForDestroy: List<View>) {
+    val duration = 3000L
 
+    fun destroyWithDelay(thanosViews: List<ThanosView>, viewsForDestroy: List<View>) {
         viewsForDestroy.forEachIndexed { index, destroyView ->
             handler.postDelayed({
                 val bitmap = Bitmap.createBitmap(destroyView.width, destroyView.height, Bitmap.Config.ARGB_8888)

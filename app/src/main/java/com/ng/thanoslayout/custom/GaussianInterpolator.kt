@@ -5,7 +5,7 @@ import android.animation.TimeInterpolator
 //todo add normal javadoc, please
 class GaussianInterpolator(
     private val sigma: Float = 1f,
-    private val u: Float = 1f,
+    private val mu: Float = 1f,
     private val multipier: Float = 1f
 ) : TimeInterpolator {
 
@@ -13,7 +13,7 @@ class GaussianInterpolator(
     override fun getInterpolation(input: Float): Float {
         return (((1f / (sigma * Math.sqrt(2 * Math.PI))) * Math.pow(
             Math.E,
-            -0.5 * Math.pow(((input - u) / sigma).toDouble(), 2.0)
+            -0.5 * Math.pow(((input - mu) / sigma).toDouble(), 2.0)
         )) / 4).toFloat() * multipier
     }
 }
