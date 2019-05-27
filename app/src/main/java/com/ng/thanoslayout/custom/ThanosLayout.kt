@@ -36,10 +36,18 @@ class ThanosLayout : RelativeLayout {
 
     //todo add view to window/root
     private fun fillListThanosViews() {
+        val gaussianInterpolator = GaussianInterpolator(
+            infinityFist.soulStone.sigma,
+            infinityFist.soulStone.mu,
+            infinityFist.soulStone.multipier
+        )
         val thanosViews = mutableListOf<ThanosView>().apply {
             viewsForDestroy.forEach { viewForDestroy ->
                 val thanosView = ThanosView(context).apply {
                     infinityFist = this@ThanosLayout.infinityFist
+                    interpolator = gaussianInterpolator
+                    squareSize = infinityFist.spaceStone.squareSize
+                    alphaPaint.alpha = infinityFist.realityStone.alphaStart
                     id = View.generateViewId()
                 }
 //                val layoutParams = viewForDestroy.layoutParams

@@ -15,7 +15,7 @@ class TimeStone(@ColorRes color: Int) {
     private val destroyDelay
         get() = (random.nextDouble() * 500L + 500L).toLong()
 
-    val duration = 3000L
+    val duration = 5000L
 
     fun destroyWithDelay(thanosViews: List<ThanosView>, viewsForDestroy: List<View>) {
         viewsForDestroy.forEachIndexed { index, destroyView ->
