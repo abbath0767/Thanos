@@ -40,8 +40,6 @@ class ThanosView : View {
     private val utilRect = Rect()
     private var leftBorder = 0
     private var topBorder = 0
-    private var rightBorder = 0
-    private var botBorder = 0
     private var tableWidth = 0
     private var tableHeight = 0
 
@@ -95,13 +93,16 @@ class ThanosView : View {
         divideToSquares()
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val measureWidth = MeasureSpec.getSize(widthMeasureSpec)
+        val measureHeight = MeasureSpec.getSize(heightMeasureSpec)
+        leftBorder = measureWidth / 4
+        topBorder = measureHeight / 4
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    }
+
     //todo simplify this
     private fun divideToSquares() {
-        //todo move to on measure
-        leftBorder = width / 4
-        topBorder = height / 4
-        rightBorder = width - width / 4
-        botBorder = height - height / 4
         tableWidth = (originalBitmap.width) / SQUARE_SIZE
         tableHeight = (originalBitmap.height) / SQUARE_SIZE
 
