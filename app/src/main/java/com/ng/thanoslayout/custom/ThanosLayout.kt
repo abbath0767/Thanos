@@ -27,7 +27,6 @@ class ThanosLayout : RelativeLayout {
             val chaosValue = infinityFist.realityStone.getChaoticValue()
             for (index in 0 until childCount) {
                 if ((index + chaosValue) % 2 == 0)
-//                if (index == 0 || index == 3)
                     add(getChildAt(index))
             }
         }
