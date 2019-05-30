@@ -27,8 +27,8 @@ class ThanosView : View {
 
     val alphaPaint = Paint()
     private val utilRect = Rect()
-    private var leftBorder = 0
-    private var topBorder = 0
+    var leftBorder = 0
+    var topBorder = 0
     private var tableWidth = 0
     private var tableHeight = 0
 
@@ -80,14 +80,6 @@ class ThanosView : View {
 
     fun destroy() {
         divideToSquares()
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val measureWidth = MeasureSpec.getSize(widthMeasureSpec)
-        val measureHeight = MeasureSpec.getSize(heightMeasureSpec)
-        leftBorder = measureWidth / 4
-        topBorder = measureHeight / 4
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
     //todo simplify this

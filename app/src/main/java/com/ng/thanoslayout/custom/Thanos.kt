@@ -1,74 +1,134 @@
 package com.ng.thanoslayout.custom
 
+import android.app.Activity
+import android.content.Context
+import android.graphics.PixelFormat
+import android.util.DisplayMetrics
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
+import android.view.WindowManager
 
-class Thanos {
+
+class Thanos(private val activity: Activity) {
 
     private val infinityFist = InfinityFist()
 
     private var viewsForDestroy: List<View> = emptyList()
     private var thanosViews: List<ThanosView> = emptyList()
+    private var screenWidth = 0
+    private var screenHeight = 0
 
-    fun snap(container: ViewGroup) {
-        fillListViewsForSnap(container)
-        fillListThanosViews(container)
+    fun snap() {
+        fillListViewsForSnap()
+        fillListThanosViews()
         startDestroy()
     }
 
-    private fun fillListViewsForSnap(container: ViewGroup) {
-        val childCount = container.childCount
+    private fun fillListViewsForSnap() {
+        val root = getRoot()
+        val childCount = root.childCount
         val result = mutableListOf<View>().apply {
             val chaosValue = infinityFist.realityStone.getChaoticValue()
             for (index in 0 until childCount) {
-                if ((index + chaosValue) % 2 == 0)
-                    add(container.getChildAt(index))
+                if ((index + chaosValue) % 2 == 0) {
+                    val child = root.getChildAt(index)
+                    if (child !is ViewGroup)
+                        add(child)
+                }
             }
         }
 
         viewsForDestroy = result.toList()
     }
 
-    private fun fillListThanosViews(container: ViewGroup) {
+    private fun fillListThanosViews() {
         val gaussianInterpolator = GaussianInterpolator(
             infinityFist.soulStone.sigma,
             infinityFist.soulStone.mu,
             infinityFist.soulStone.multipier
         )
 
+        val wm = activity.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val metrics = DisplayMetrics()
+        wm.defaultDisplay.getMetrics(metrics)
+        screenWidth = metrics.widthPixels
+        screenHeight = metrics.heightPixels
+
         val thanosViews = mutableListOf<ThanosView>().apply {
-            viewsForDestroy.forEach { viewForDestroy ->
-                val thanosView = ThanosView(container.context).apply {
-                    infinityFist = this@Thanos.infinityFist
-                    interpolator = gaussianInterpolator
-                    squareSize = infinityFist.spaceStone.squareSize
-                    alphaPaint.alpha = infinityFist.realityStone.alphaStart
-                    id = View.generateViewId()
+            viewsForDestroy.forEach { view ->
+                val location = IntArray(2).apply {
+                    view.getLocationInWindow(this)
                 }
-                val layoutParams = RelativeLayout.LayoutParams(
-                    viewForDestroy.width * 2,
-                    viewForDestroy.height * 2
-                ).apply {
-                    addRule(RelativeLayout.ALIGN_RIGHT, viewForDestroy.id)
-                    addRule(RelativeLayout.ALIGN_LEFT, viewForDestroy.id)
-                    addRule(RelativeLayout.ALIGN_TOP, viewForDestroy.id)
-                    addRule(RelativeLayout.ALIGN_BOTTOM, viewForDestroy.id)
-                    setMargins(
-                        -viewForDestroy.width / 2,
-                        -viewForDestroy.height / 2,
-                        -viewForDestroy.width / 2,
-                        -viewForDestroy.height / 2
-                    )
-                }
+
+                val thanosView = generateThanosView(gaussianInterpolator)
+                val params = generateLayoutParams(view, location)
+                    .apply {
+                        gravity = Gravity.TOP or Gravity.START
+
+                        thanosView.let {
+                            when {
+                                x < 0 && y < 0 -> {
+                                    it.leftBorder = location[0]
+                                    it.topBorder = location[1]
+                                }
+                                x < 0 -> {
+                                    it.leftBorder = location[0]
+                                    it.topBorder = view.height / 2
+                                }
+                                y < 0 -> {
+                                    it.leftBorder = view.width / 2
+                                    it.topBorder = location[1]
+                                }
+                                (x + view.width * 2 > screenWidth) && (y + view.height * 2 > screenHeight) -> {
+                                    it.leftBorder = (location[0] + view.width * 2) - screenWidth
+                                    it.topBorder = (location[1] + view.height * 2) - screenHeight
+                                }
+                                x + view.width * 2 > screenWidth -> {
+                                    it.leftBorder = (location[0] + view.width * 2) - screenWidth
+                                    it.topBorder = view.height / 2
+                                }
+                                y + view.height * 2 > screenHeight -> {
+                                    it.leftBorder = view.width / 2
+                                    it.topBorder = (location[1] + view.height * 2) - screenHeight
+                                }
+                                else -> {
+                                    it.leftBorder = view.width / 2
+                                    it.topBorder = view.height / 2
+                                }
+                            }
+                        }
+                    }
+
+                wm.addView(thanosView, params)
                 add(thanosView)
-                container.addView(thanosView, layoutParams)
             }
         }
 
-
         this.thanosViews = thanosViews.toList()
     }
+
+    private fun generateThanosView(gaussianInterpolator: GaussianInterpolator) =
+        ThanosView(activity.baseContext).apply {
+            infinityFist = this@Thanos.infinityFist
+            interpolator = gaussianInterpolator
+            squareSize = infinityFist.spaceStone.squareSize
+            alphaPaint.alpha = infinityFist.realityStone.alphaStart
+            id = View.generateViewId()
+        }
+
+    private fun generateLayoutParams(view: View, location: IntArray) = WindowManager.LayoutParams(
+        view.width * 2,
+        view.height * 2,
+        location[0] - view.width / 2,
+        location[1] - view.height / 2,
+        WindowManager.LayoutParams.FIRST_APPLICATION_WINDOW,
+        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+        PixelFormat.TRANSPARENT
+    )
+
+    private fun getRoot() =
+        activity.window.decorView.findViewById<ViewGroup>(android.R.id.content).getChildAt(0) as ViewGroup
 
     private fun startDestroy() {
         infinityFist.timeStone.destroyWithDelay(thanosViews, viewsForDestroy)

@@ -24,8 +24,8 @@ class TimeStone(@ColorRes color: Int) {
                 val canvas = Canvas(bitmap)
                 destroyView.draw(canvas)
                 thanosViews[index].setBitmap(bitmap)
-                destroyView.visibility = View.INVISIBLE
                 thanosViews[index].destroy()
+                destroyView.visibility = View.INVISIBLE
             }, destroyDelay)
         }
     }
