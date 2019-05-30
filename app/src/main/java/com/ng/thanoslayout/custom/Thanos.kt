@@ -1,56 +1,51 @@
 package com.ng.thanoslayout.custom
 
-import android.content.Context
-import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.widget.RelativeLayout
 
-class ThanosLayout : RelativeLayout {
-    constructor(context: Context) : this(context, null)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
+class Thanos {
 
     private val infinityFist = InfinityFist()
 
     private var viewsForDestroy: List<View> = emptyList()
     private var thanosViews: List<ThanosView> = emptyList()
 
-    fun snap() {
-        fillListViewsForSnap()
-        fillListThanosViews()
+    fun snap(container: ViewGroup) {
+        fillListViewsForSnap(container)
+        fillListThanosViews(container)
         startDestroy()
     }
 
-    private fun fillListViewsForSnap() {
-        val childCount = childCount
+    private fun fillListViewsForSnap(container: ViewGroup) {
+        val childCount = container.childCount
         val result = mutableListOf<View>().apply {
             val chaosValue = infinityFist.realityStone.getChaoticValue()
             for (index in 0 until childCount) {
                 if ((index + chaosValue) % 2 == 0)
-                    add(getChildAt(index))
+                    add(container.getChildAt(index))
             }
         }
 
         viewsForDestroy = result.toList()
     }
 
-    //todo add view to window/root
-    private fun fillListThanosViews() {
+    private fun fillListThanosViews(container: ViewGroup) {
         val gaussianInterpolator = GaussianInterpolator(
             infinityFist.soulStone.sigma,
             infinityFist.soulStone.mu,
             infinityFist.soulStone.multipier
         )
+
         val thanosViews = mutableListOf<ThanosView>().apply {
             viewsForDestroy.forEach { viewForDestroy ->
-                val thanosView = ThanosView(context).apply {
-                    infinityFist = this@ThanosLayout.infinityFist
+                val thanosView = ThanosView(container.context).apply {
+                    infinityFist = this@Thanos.infinityFist
                     interpolator = gaussianInterpolator
                     squareSize = infinityFist.spaceStone.squareSize
                     alphaPaint.alpha = infinityFist.realityStone.alphaStart
                     id = View.generateViewId()
                 }
-//                val layoutParams = viewForDestroy.layoutParams
                 val layoutParams = RelativeLayout.LayoutParams(
                     viewForDestroy.width * 2,
                     viewForDestroy.height * 2
@@ -67,7 +62,7 @@ class ThanosLayout : RelativeLayout {
                     )
                 }
                 add(thanosView)
-                addView(thanosView, layoutParams)
+                container.addView(thanosView, layoutParams)
             }
         }
 
