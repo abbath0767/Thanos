@@ -25,7 +25,9 @@ class TimeStone(@ColorRes color: Int) {
                 destroyView.draw(canvas)
                 thanosViews[index].setBitmap(bitmap)
                 thanosViews[index].destroy()
-                destroyView.visibility = View.INVISIBLE
+//                destroyView.visibility = View.INVISIBLE
+                //todo check it...
+                destroyView.animate().alpha(0f).setDuration(300L).start()
             }, destroyDelay)
         }
     }

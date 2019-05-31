@@ -27,17 +27,12 @@ class Thanos(private val activity: Activity) {
 
     private fun fillListViewsForSnap() {
         val root = getRoot()
-        val childCount = root.childCount
-        val result = mutableListOf<View>().apply {
-            val chaosValue = infinityFist.realityStone.getChaoticValue()
-            for (index in 0 until childCount) {
-                if ((index + chaosValue) % 2 == 0) {
-                    val child = root.getChildAt(index)
-                    if (child !is ViewGroup)
-                        add(child)
-                }
-            }
-        }
+        val chaosValue = infinityFist.realityStone.getChaoticValue()
+        val result = mutableListOf<View>()
+        ViewTreverser { view, index ->
+            if ((index + chaosValue) % 2 == 0)
+                result.add(view)
+        }.treverse(root)
 
         viewsForDestroy = result.toList()
     }
@@ -132,5 +127,21 @@ class Thanos(private val activity: Activity) {
 
     private fun startDestroy() {
         infinityFist.timeStone.destroyWithDelay(thanosViews, viewsForDestroy)
+    }
+
+    internal class ViewTreverser(private val marker: (View, Int) -> Unit) {
+        private var counter = 0
+        internal fun treverse(viewGroup: ViewGroup) {
+            val childCount = viewGroup.childCount
+            for (index in 0 until childCount) {
+                val view = viewGroup.getChildAt(index)
+                if (view is ViewGroup) {
+                    treverse(view)
+                } else {
+                    marker.invoke(view, counter)
+                    counter++
+                }
+            }
+        }
     }
 }

@@ -20,6 +20,7 @@ class ThanosView : View {
     var squareSize = 0
     private var movePointFactory = MovePointsFactory()
     private lateinit var originalBitmap: Bitmap
+    private var needDrawOriginal = false
 
     private var bitmapTable: MutableList<MutableList<Bitmap>> = mutableListOf()
     private var moveTable: MutableList<MutableList<MovePoints>> = mutableListOf()
@@ -33,47 +34,55 @@ class ThanosView : View {
     private var tableHeight = 0
 
     override fun onDraw(canvas: Canvas) {
-        //todo simplify this
-        //todo use bitmap square size, not calculate in place, for what?
+        if (needDrawOriginal) {
+            val rect = Rect(leftBorder, topBorder, originalBitmap.width + leftBorder, originalBitmap.height + topBorder)
+            canvas.drawBitmap(originalBitmap, null, rect, null)
+        }
+
         if (bitmapTable.isNotEmpty()) {
             bitmapTable.forEachIndexed { row, mutableListTable ->
                 mutableListTable.forEachIndexed { column, bitmapSquare ->
-                    if (row != tableHeight && column != tableWidth) {
-                        utilRect.set(
-                            leftBorder + positionTable[row][column].x,
-                            topBorder + positionTable[row][column].y,
-                            leftBorder + squareSize + positionTable[row][column].x,
-                            topBorder + squareSize + positionTable[row][column].y
-                        )
-                    } else if (row == tableHeight && column != tableWidth) {
-                        utilRect.set(
-                            leftBorder + positionTable[row][column].x,
-                            topBorder + positionTable[row][column].y,
-                            leftBorder + squareSize + positionTable[row][column].x,
-                            topBorder + originalBitmap.height - squareSize * tableHeight + positionTable[row][column].y
-                        )
-                    } else if (row != tableHeight && column == tableWidth) {
-                        utilRect.set(
-                            leftBorder + positionTable[row][column].x,
-                            topBorder + positionTable[row][column].y,
-                            leftBorder + originalBitmap.width - squareSize * tableWidth + positionTable[row][column].x,
-                            topBorder + squareSize + positionTable[row][column].y
-                        )
-                    } else {
-                        utilRect.set(
-                            leftBorder + positionTable[row][column].x,
-                            topBorder + positionTable[row][column].y,
-                            leftBorder + originalBitmap.width - squareSize * tableWidth + positionTable[row][column].x,
-                            topBorder + originalBitmap.height - squareSize * tableHeight + positionTable[row][column].y
-                        )
-                    }
+                    setupRect(row, column)
                     canvas.drawBitmap(bitmapSquare, null, utilRect, alphaPaint)
                 }
             }
         }
     }
 
+    private fun setupRect(row: Int, column: Int) {
+        if (row != tableHeight && column != tableWidth) {
+            utilRect.set(
+                leftBorder + positionTable[row][column].x,
+                topBorder + positionTable[row][column].y,
+                leftBorder + squareSize + positionTable[row][column].x,
+                topBorder + squareSize + positionTable[row][column].y
+            )
+        } else if (row == tableHeight && column != tableWidth) {
+            utilRect.set(
+                leftBorder + positionTable[row][column].x,
+                topBorder + positionTable[row][column].y,
+                leftBorder + squareSize + positionTable[row][column].x,
+                topBorder + originalBitmap.height - squareSize * tableHeight + positionTable[row][column].y
+            )
+        } else if (row != tableHeight && column == tableWidth) {
+            utilRect.set(
+                leftBorder + positionTable[row][column].x,
+                topBorder + positionTable[row][column].y,
+                leftBorder + originalBitmap.width - squareSize * tableWidth + positionTable[row][column].x,
+                topBorder + squareSize + positionTable[row][column].y
+            )
+        } else {
+            utilRect.set(
+                leftBorder + positionTable[row][column].x,
+                topBorder + positionTable[row][column].y,
+                leftBorder + originalBitmap.width - squareSize * tableWidth + positionTable[row][column].x,
+                topBorder + originalBitmap.height - squareSize * tableHeight + positionTable[row][column].y
+            )
+        }
+    }
+
     fun setBitmap(bitmap: Bitmap) {
+        needDrawOriginal = true
         originalBitmap = bitmap
         invalidate()
     }
@@ -82,7 +91,6 @@ class ThanosView : View {
         divideToSquares()
     }
 
-    //todo simplify this
     private fun divideToSquares() {
         tableWidth = (originalBitmap.width) / squareSize
         tableHeight = (originalBitmap.height) / squareSize
@@ -98,78 +106,81 @@ class ThanosView : View {
             bitmapTable.add(mutableListOf())
             moveTable.add(mutableListOf())
             positionTable.add(mutableListOf())
-            for (column in 0 until tableWidth + squareColumnMultipier) {
-                if (row != tableHeight && column != tableWidth) {
-                    val bitmapSquare = Bitmap.createBitmap(
-                        originalBitmap,
-                        column * squareSize,
-                        row * squareSize,
-                        squareSize,
-                        squareSize
-                    )
-                    bitmapTable[row].add(bitmapSquare)
-                    moveTable[row].add(movePointFactory.generateMovePoint(column * squareSize, row * squareSize))
-                    positionTable[row].add(
-                        PointDiff(
-                            column * squareSize,
-                            row * squareSize
-                        )
-                    )
-                } else if (row == tableHeight && column != tableWidth) {
-                    val bitmapSquare = Bitmap.createBitmap(
-                        originalBitmap,
-                        column * squareSize,
-                        row * squareSize,
-                        squareSize,
-                        originalBitmap.height - squareSize * tableHeight
-                    )
-                    bitmapTable[row].add(bitmapSquare)
-                    moveTable[row].add(movePointFactory.generateMovePoint(column * squareSize, row * squareSize))
-                    positionTable[row].add(
-                        PointDiff(
-                            column * squareSize,
-                            row * squareSize
-                        )
-                    )
-                } else if (row != tableHeight && column == tableWidth) {
-                    val bitmapSquare = Bitmap.createBitmap(
-                        originalBitmap,
-                        column * squareSize,
-                        row * squareSize,
-                        originalBitmap.width - squareSize * tableWidth,
-                        squareSize
-                    )
-                    bitmapTable[row].add(bitmapSquare)
-                    moveTable[row].add(movePointFactory.generateMovePoint(column * squareSize, row * squareSize))
-                    positionTable[row].add(
-                        PointDiff(
-                            column * squareSize,
-                            row * squareSize
-                        )
-                    )
-                } else {
-                    val bitmapSquare = Bitmap.createBitmap(
-                        originalBitmap,
-                        column * squareSize,
-                        row * squareSize,
-                        originalBitmap.width - squareSize * tableWidth,
-                        originalBitmap.height - squareSize * tableHeight
-                    )
-                    bitmapTable[row].add(bitmapSquare)
-                    moveTable[row].add(movePointFactory.generateMovePoint(column * squareSize, row * squareSize))
-                    positionTable[row].add(
-                        PointDiff(
-                            column * squareSize,
-                            row * squareSize
-                        )
-                    )
-                }
-            }
+            for (column in 0 until tableWidth + squareColumnMultipier)
+                setUpSquare(row, column)
         }
 
         invalidate()
 
         startDestroyAnimation()
+    }
+
+    private fun setUpSquare(row: Int, column: Int) {
+        if (row != tableHeight && column != tableWidth) {
+            val bitmapSquare = Bitmap.createBitmap(
+                originalBitmap,
+                column * squareSize,
+                row * squareSize,
+                squareSize,
+                squareSize
+            )
+            bitmapTable[row].add(bitmapSquare)
+            moveTable[row].add(movePointFactory.generateMovePoint(column * squareSize, row * squareSize))
+            positionTable[row].add(
+                PointDiff(
+                    column * squareSize,
+                    row * squareSize
+                )
+            )
+        } else if (row == tableHeight && column != tableWidth) {
+            val bitmapSquare = Bitmap.createBitmap(
+                originalBitmap,
+                column * squareSize,
+                row * squareSize,
+                squareSize,
+                originalBitmap.height - squareSize * tableHeight
+            )
+            bitmapTable[row].add(bitmapSquare)
+            moveTable[row].add(movePointFactory.generateMovePoint(column * squareSize, row * squareSize))
+            positionTable[row].add(
+                PointDiff(
+                    column * squareSize,
+                    row * squareSize
+                )
+            )
+        } else if (row != tableHeight && column == tableWidth) {
+            val bitmapSquare = Bitmap.createBitmap(
+                originalBitmap,
+                column * squareSize,
+                row * squareSize,
+                originalBitmap.width - squareSize * tableWidth,
+                squareSize
+            )
+            bitmapTable[row].add(bitmapSquare)
+            moveTable[row].add(movePointFactory.generateMovePoint(column * squareSize, row * squareSize))
+            positionTable[row].add(
+                PointDiff(
+                    column * squareSize,
+                    row * squareSize
+                )
+            )
+        } else {
+            val bitmapSquare = Bitmap.createBitmap(
+                originalBitmap,
+                column * squareSize,
+                row * squareSize,
+                originalBitmap.width - squareSize * tableWidth,
+                originalBitmap.height - squareSize * tableHeight
+            )
+            bitmapTable[row].add(bitmapSquare)
+            moveTable[row].add(movePointFactory.generateMovePoint(column * squareSize, row * squareSize))
+            positionTable[row].add(
+                PointDiff(
+                    column * squareSize,
+                    row * squareSize
+                )
+            )
+        }
     }
 
     private fun startDestroyAnimation() {
@@ -179,11 +190,11 @@ class ThanosView : View {
             addUpdateListener { value ->
                 alphaPaint.alpha = value.animatedValue as Int
             }
+            needDrawOriginal = false
             start()
         }
         ValueAnimator.ofFloat(0f, 1f).apply {
             duration = infinityFist.timeStone.duration
-            //todo change to non-chaotic value
             interpolator = this@ThanosView.interpolator
             addUpdateListener { value ->
                 for (row in 0 until positionTable.size) {
