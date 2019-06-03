@@ -1,5 +1,6 @@
 package com.ng.thanoslayout.custom
 
+import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,6 +9,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
+import com.ng.thanoslayout.log
 
 class ThanosView : View {
 
@@ -21,6 +23,7 @@ class ThanosView : View {
     private var movePointFactory = MovePointsFactory()
     private lateinit var originalBitmap: Bitmap
     private var needDrawOriginal = false
+    private lateinit var finishCallback: () -> Unit
 
     private var bitmapTable: MutableList<MutableList<Bitmap>> = mutableListOf()
     private var moveTable: MutableList<MutableList<MovePoints>> = mutableListOf()
@@ -87,7 +90,8 @@ class ThanosView : View {
         invalidate()
     }
 
-    fun destroy() {
+    fun destroy(finishCallback: () -> Unit) {
+        this.finishCallback = finishCallback
         divideToSquares()
     }
 
@@ -190,6 +194,20 @@ class ThanosView : View {
             addUpdateListener { value ->
                 alphaPaint.alpha = value.animatedValue as Int
             }
+            addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    finishCallback.invoke()
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationStart(animation: Animator?) {
+                }
+            })
             needDrawOriginal = false
             start()
         }
