@@ -1,4 +1,4 @@
-package com.ng.thanoslayout.custom
+package com.ng.thanos.custom
 
 import android.R
 import com.ng.thanoslayout.custom.stone.*

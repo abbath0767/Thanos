@@ -1,4 +1,4 @@
-package com.ng.thanoslayout.custom
+package com.ng.thanos.custom
 
 import android.app.Activity
 import android.content.Context
@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import com.ng.thanos.custom.InfinityFist
 
 
 class Thanos(private val activity: Activity) {

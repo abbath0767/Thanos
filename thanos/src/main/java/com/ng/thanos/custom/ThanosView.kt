@@ -1,4 +1,4 @@
-package com.ng.thanoslayout.custom
+package com.ng.thanos.custom
 
 import android.animation.Animator
 import android.animation.ValueAnimator
@@ -9,7 +9,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
-import com.ng.thanoslayout.log
 
 class ThanosView : View {
 

@@ -1,4 +1,4 @@
-package com.ng.thanoslayout.custom
+package com.ng.thanos.custom
 
 data class PointDiff(
     val x: Int,
