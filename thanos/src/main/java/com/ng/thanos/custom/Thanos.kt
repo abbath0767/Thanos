@@ -29,10 +29,10 @@ class Thanos(private val activity: Activity) {
         val root = getRoot()
         val chaosValue = infinityFist.realityStone.getChaoticValue()
         val result = mutableListOf<View>()
-        ViewTreverser { view, index ->
+        ViewTraverser { view, index ->
             if ((index + chaosValue) % 2 == 0)
                 result.add(view)
-        }.treverse(root)
+        }.traverse(root)
 
         viewsForDestroy = result.toList()
     }
@@ -129,14 +129,14 @@ class Thanos(private val activity: Activity) {
         infinityFist.timeStone.destroyWithDelay(thanosViews, viewsForDestroy)
     }
 
-    internal class ViewTreverser(private val marker: (View, Int) -> Unit) {
+    internal class ViewTraverser(private val marker: (View, Int) -> Unit) {
         private var counter = 0
-        internal fun treverse(viewGroup: ViewGroup) {
+        internal fun traverse(viewGroup: ViewGroup) {
             val childCount = viewGroup.childCount
             for (index in 0 until childCount) {
                 val view = viewGroup.getChildAt(index)
                 if (view is ViewGroup) {
-                    treverse(view)
+                    traverse(view)
                 } else {
                     marker.invoke(view, counter)
                     counter++
