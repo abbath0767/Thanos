@@ -1,10 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply from: 'publish.gradle'
+
 
 android {
     compileSdkVersion 28
-
-
 
     defaultConfig {
         minSdkVersion 21
