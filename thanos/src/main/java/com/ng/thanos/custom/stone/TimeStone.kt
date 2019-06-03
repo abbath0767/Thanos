@@ -1,10 +1,10 @@
-package com.ng.thanoslayout.custom.stone
+package com.ng.thanos.custom.stone
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.support.annotation.ColorRes
 import android.view.View
-import com.ng.thanoslayout.custom.ThanosView
+import com.ng.thanos.custom.ThanosView
 
 class TimeStone(@ColorRes color: Int) {
     val duration = 5000L

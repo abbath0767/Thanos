@@ -2,7 +2,7 @@ package com.ng.thanoslayout
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.ng.thanoslayout.custom.Thanos
+import com.ng.thanos.custom.Thanos
 import kotlinx.android.synthetic.main.activity_main.*
 
 
