@@ -8,7 +8,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import com.ng.thanos.custom.InfinityFist
 
 
 class Thanos(private val activity: Activity) {
@@ -138,7 +137,7 @@ class Thanos(private val activity: Activity) {
                 val view = viewGroup.getChildAt(index)
                 if (view is ViewGroup) {
                     traverse(view)
-                } else {
+                } else if (view.width != 0 && view.height != 0 && view.visibility == View.VISIBLE) {
                     marker.invoke(view, counter)
                     counter++
                 }

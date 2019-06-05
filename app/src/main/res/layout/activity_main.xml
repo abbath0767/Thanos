@@ -8,61 +8,55 @@
 
     <ImageView
             android:id="@+id/tony_image"
+            style="@style/AvengerImage"
             android:src="@drawable/tony"
-            android:scaleType="centerCrop"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_width="@dimen/image_size"
-            android:layout_height="@dimen/image_size"/>
+            android:layout_alignParentLeft="true"/>
+
+    <View android:id="@+id/zero_size_view"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          android:layout_below="@id/tony_image"/>
+
+    <View android:id="@+id/invisible_view"
+          android:layout_width="10dp"
+          android:layout_height="10dp"
+          android:layout_below="@id/tony_image"/>
 
     <TextView
             android:id="@+id/tony_header"
             android:text="@string/tony_header"
-            android:textSize="16sp"
-            android:layout_toRightOf="@id/tony_image"
-            android:layout_marginLeft="16dp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            style="@style/HeaderText"
+            android:layout_toRightOf="@id/tony_image"/>
 
     <TextView
             android:id="@+id/tony_description"
-            android:layout_marginLeft="14dp"
+            style="@style/DescriptionText"
             android:layout_toRightOf="@id/tony_image"
             android:layout_below="@id/tony_header"
-            android:text="@string/tony_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:text="@string/tony_description"/>
 
     <ImageView
             android:id="@+id/capitan_image"
             android:src="@drawable/capitan"
-            android:scaleType="centerCrop"
+            style="@style/AvengerImage"
             android:layout_below="@id/tony_description"
             android:layout_alignParentLeft="true"
-            android:layout_marginTop="16dp"
-            android:layout_width="@dimen/image_size"
-            android:layout_height="@dimen/image_size"/>
+            android:layout_marginTop="16dp"/>
 
     <TextView
             android:id="@+id/capitan_header"
             android:text="@string/capitan_header"
-            android:textSize="16sp"
+            style="@style/HeaderText"
             android:layout_toRightOf="@id/capitan_image"
-            android:layout_marginLeft="16dp"
-            android:layout_alignTop="@id/capitan_image"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_alignTop="@id/capitan_image"/>
 
     <TextView
             android:id="@+id/capitan_description"
-            android:layout_marginLeft="14dp"
+            style="@style/DescriptionText"
             android:layout_toRightOf="@id/capitan_image"
             android:layout_below="@id/capitan_header"
-            android:text="@string/capitan_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:text="@string/capitan_description"/>
 
     <Button
             android:id="@+id/button_to_snap"
